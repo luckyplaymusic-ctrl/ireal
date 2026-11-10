@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bases iReal del trombón</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: una columna de "hojas de acordes" tipo lead sheet, con compases en rejilla de 4 */
+:root{--bg:#f4f6f8;--card:#ffffff;--fg:#17212b;--muted:#5a6876;--line:#d5dde5;--accent:#1d5f8a;--accent-fg:#ffffff;
+--display:"Space Grotesk",system-ui,sans-serif;--body:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f161d;--card:#18222c;--fg:#e6edf3;--muted:#9aa9b7;--line:#2b3a48;--accent:#5fb0e6;--accent-fg:#06121c;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f161d;--card:#18222c;--fg:#e6edf3;--muted:#9aa9b7;--line:#2b3a48;--accent:#5fb0e6;--accent-fg:#06121c;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.5}
+main{max-width:760px;margin:0 auto;padding-block:28px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:20px}
+h1{font-family:var(--display);font-size:1.9rem;margin:0;text-wrap:balance;letter-spacing:-.01em}
+.intro p{margin:.4rem 0 0;color:var(--muted);max-width:62ch}
+.how{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;font-size:.93rem}
+.how ol{margin:.3rem 0 0;padding-left:1.2rem}
+.chart{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.chart header{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+.group{width:100%;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);font-weight:600}
+h2{font-family:var(--display);font-size:1.25rem;margin:0}
+.key{font-family:var(--mono);font-size:.8rem;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);border-left:2px solid var(--fg);border-right:2px solid var(--fg)}
+.bar{font-family:var(--mono);font-size:.95rem;padding:10px 6px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);text-align:center;font-variant-numeric:tabular-nums}
+.bar:nth-child(4n){border-right:0}
+.tip{margin:0;color:var(--muted);font-size:.92rem}
+.actions{display:flex;flex-wrap:wrap;gap:8px}
+.open,.copy{font:600 .9rem var(--body);border-radius:8px;padding:9px 14px;cursor:pointer;text-decoration:none}
+.open{background:var(--accent);color:var(--accent-fg);border:1px solid var(--accent)}
+.copy{background:transparent;color:var(--fg);border:1px solid var(--line)}
+.open:focus-visible,.copy:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.raw{display:block;font-family:var(--mono);font-size:.7rem;color:var(--muted);overflow-wrap:anywhere;user-select:all}
+@media (max-width:420px){.bar{font-size:.82rem;padding:8px 2px}}
+</style>
+</head><body>
+<main>
+  <section class="intro"><h1>Bases iReal del trombón</h1>
+  <p>Acompañamientos para el bloque de jazz: la tonalidad de la semana (Mi mayor) y los deberes de Antonio sobre el solo de Chet Baker. Estilo Medium Swing; pon el tempo en la app (empieza en ♩ = 80).</p></section>
+  <div class="how"><strong>Cómo importarlas</strong><ol>
+  <li>Toca <em>Abrir en iReal Pro</em>. Si se abre la app, la base queda guardada.</li>
+  <li>Si no pasa nada, toca <em>Copiar enlace</em>, pégalo en la barra de direcciones del navegador del móvil y pulsa Ir.</li></ol></div>
+  <article class="chart">
+  <header><span class="group">Tonalidad de la semana</span><h2>ii–V–I en Mi</h2><span class="key">Tono E</span></header>
+  <div class="grid"><span class="bar">F♯m7</span><span class="bar">B7</span><span class="bar">Emaj7</span><span class="bar">Emaj7</span></div>
+  <p class="tip">Patrón 1-2-3-5, el del ii arpegiado y V en escala, y notas guía. Di «dos menor, cinco siete, uno» al tocar.</p>
+  <div class="actions">
+    <a class="open" href="irealbook://ii%E2%80%93V%E2%80%93I%20en%20Mi=Ejercicio%20Diario=Medium%20Swing=E=n=T44%7BF%23-7%20%7CB7%20%7CE%5E7%20%7CE%5E7%20%7D">Abrir en iReal Pro</a>
+    <button type="button" class="copy" data-url="irealbook://ii%E2%80%93V%E2%80%93I%20en%20Mi=Ejercicio%20Diario=Medium%20Swing=E=n=T44%7BF%23-7%20%7CB7%20%7CE%5E7%20%7CE%5E7%20%7D" id="copy0">Copiar enlace</button>
+  </div>
+  <code class="raw" id="raw0">irealbook://ii%E2%80%93V%E2%80%93I%20en%20Mi=Ejercicio%20Diario=Medium%20Swing=E=n=T44%7BF%23-7%20%7CB7%20%7CE%5E7%20%7CE%5E7%20%7D</code>
+</article><article class="chart">
+  <header><span class="group">Tonalidad de la semana</span><h2>Turnaround en Mi</h2><span class="key">Tono E</span></header>
+  <div class="grid"><span class="bar">Emaj7</span><span class="bar">C♯m7</span><span class="bar">F♯m7</span><span class="bar">B7</span></div>
+  <p class="tip">I–vi–ii–V. Notas guía (3ª y 7ª) y luego arpegios 1-3-5-7 en cada acorde.</p>
+  <div class="actions">
+    <a class="open" href="irealbook://Turnaround%20en%20Mi=Ejercicio%20Diario=Medium%20Swing=E=n=T44%7BE%5E7%20%7CC%23-7%20%7CF%23-7%20%7CB7%20%7D">Abrir en iReal Pro</a>
+    <button type="button" class="copy" data-url="irealbook://Turnaround%20en%20Mi=Ejercicio%20Diario=Medium%20Swing=E=n=T44%7BE%5E7%20%7CC%23-7%20%7CF%23-7%20%7CB7%20%7D" id="copy1">Copiar enlace</button>
+  </div>
+  <code class="raw" id="raw1">irealbook://Turnaround%20en%20Mi=Ejercicio%20Diario=Medium%20Swing=E=n=T44%7BE%5E7%20%7CC%23-7%20%7CF%23-7%20%7CB7%20%7D</code>
+</article><article class="chart">
+  <header><span class="group">Tonalidad de la semana</span><h2>Rueda diatónica en Mi</h2><span class="key">Tono E</span></header>
+  <div class="grid"><span class="bar">Emaj7</span><span class="bar">Amaj7</span><span class="bar">D♯m7♭5</span><span class="bar">G♯m7</span><span class="bar">C♯m7</span><span class="bar">F♯m7</span><span class="bar">B7</span><span class="bar">Emaj7</span></div>
+  <p class="tip">La rueda de cuartas diatónica que ya hiciste, ahora con base. Di el grado de cada acorde (I, IV, VII, III, VI, II, V, I).</p>
+  <div class="actions">
+    <a class="open" href="irealbook://Rueda%20diat%C3%B3nica%20en%20Mi=Ejercicio%20Diario=Medium%20Swing=E=n=T44%7BE%5E7%20%7CA%5E7%20%7CD%23h7%20%7CG%23-7%20%7CC%23-7%20%7CF%23-7%20%7CB7%20%7CE%5E7%20%7D">Abrir en iReal Pro</a>
+    <button type="button" class="copy" data-url="irealbook://Rueda%20diat%C3%B3nica%20en%20Mi=Ejercicio%20Diario=Medium%20Swing=E=n=T44%7BE%5E7%20%7CA%5E7%20%7CD%23h7%20%7CG%23-7%20%7CC%23-7%20%7CF%23-7%20%7CB7%20%7CE%5E7%20%7D" id="copy2">Copiar enlace</button>
+  </div>
+  <code class="raw" id="raw2">irealbook://Rueda%20diat%C3%B3nica%20en%20Mi=Ejercicio%20Diario=Medium%20Swing=E=n=T44%7BE%5E7%20%7CA%5E7%20%7CD%23h7%20%7CG%23-7%20%7CC%23-7%20%7CF%23-7%20%7CB7%20%7CE%5E7%20%7D</code>
+</article><article class="chart">
+  <header><span class="group">Deberes de Antonio</span><h2>ii–V–I de All the Things</h2><span class="key">Tono A♭</span></header>
+  <div class="grid"><span class="bar">B♭m7</span><span class="bar">E♭7</span><span class="bar">A♭maj7</span><span class="bar">A♭maj7</span><span class="bar">Fm7</span><span class="bar">B♭7</span><span class="bar">E♭maj7</span><span class="bar">E♭maj7</span><span class="bar">Am7</span><span class="bar">D7</span><span class="bar">Gmaj7</span><span class="bar">Gmaj7</span><span class="bar">F♯m7</span><span class="bar">B7</span><span class="bar">Emaj7</span><span class="bar">Emaj7</span></div>
+  <p class="tip">La frase del compás 5 de Chet (grados 3-4-5 · 4-5-6 · 1-3-5-4) en La♭, Mi♭, Sol y Mi, cuatro compases por tonalidad.</p>
+  <div class="actions">
+    <a class="open" href="irealbook://ii%E2%80%93V%E2%80%93I%20de%20All%20the%20Things=Ejercicio%20Diario=Medium%20Swing=Ab=n=T44%7BBb-7%20%7CEb7%20%7CAb%5E7%20%7CAb%5E7%20%7CF-7%20%7CBb7%20%7CEb%5E7%20%7CEb%5E7%20%7CA-7%20%7CD7%20%7CG%5E7%20%7CG%5E7%20%7CF%23-7%20%7CB7%20%7CE%5E7%20%7CE%5E7%20%7D">Abrir en iReal Pro</a>
+    <button type="button" class="copy" data-url="irealbook://ii%E2%80%93V%E2%80%93I%20de%20All%20the%20Things=Ejercicio%20Diario=Medium%20Swing=Ab=n=T44%7BBb-7%20%7CEb7%20%7CAb%5E7%20%7CAb%5E7%20%7CF-7%20%7CBb7%20%7CEb%5E7%20%7CEb%5E7%20%7CA-7%20%7CD7%20%7CG%5E7%20%7CG%5E7%20%7CF%23-7%20%7CB7%20%7CE%5E7%20%7CE%5E7%20%7D" id="copy3">Copiar enlace</button>
+  </div>
+  <code class="raw" id="raw3">irealbook://ii%E2%80%93V%E2%80%93I%20de%20All%20the%20Things=Ejercicio%20Diario=Medium%20Swing=Ab=n=T44%7BBb-7%20%7CEb7%20%7CAb%5E7%20%7CAb%5E7%20%7CF-7%20%7CBb7%20%7CEb%5E7%20%7CEb%5E7%20%7CA-7%20%7CD7%20%7CG%5E7%20%7CG%5E7%20%7CF%23-7%20%7CB7%20%7CE%5E7%20%7CE%5E7%20%7D</code>
+</article><article class="chart">
+  <header><span class="group">Deberes de Antonio</span><h2>Círculo de cuartas maj7</h2><span class="key">Tono C</span></header>
+  <div class="grid"><span class="bar">Cmaj7</span><span class="bar">Fmaj7</span><span class="bar">B♭maj7</span><span class="bar">E♭maj7</span><span class="bar">A♭maj7</span><span class="bar">D♭maj7</span><span class="bar">G♭maj7</span><span class="bar">Bmaj7</span><span class="bar">Emaj7</span><span class="bar">Amaj7</span><span class="bar">Dmaj7</span><span class="bar">Gmaj7</span></div>
+  <p class="tip">Motivos desde la 5ª (5-3-1, 5-6-5-3, 5-4-3-2-1) y el patrón de cuartas de Chet. La 5ª de cada acorde es la fundamental del anterior.</p>
+  <div class="actions">
+    <a class="open" href="irealbook://C%C3%ADrculo%20de%20cuartas%20maj7=Ejercicio%20Diario=Medium%20Swing=C=n=T44%7BC%5E7%20%7CF%5E7%20%7CBb%5E7%20%7CEb%5E7%20%7CAb%5E7%20%7CDb%5E7%20%7CGb%5E7%20%7CB%5E7%20%7CE%5E7%20%7CA%5E7%20%7CD%5E7%20%7CG%5E7%20%7D">Abrir en iReal Pro</a>
+    <button type="button" class="copy" data-url="irealbook://C%C3%ADrculo%20de%20cuartas%20maj7=Ejercicio%20Diario=Medium%20Swing=C=n=T44%7BC%5E7%20%7CF%5E7%20%7CBb%5E7%20%7CEb%5E7%20%7CAb%5E7%20%7CDb%5E7%20%7CGb%5E7%20%7CB%5E7%20%7CE%5E7%20%7CA%5E7%20%7CD%5E7%20%7CG%5E7%20%7D" id="copy4">Copiar enlace</button>
+  </div>
+  <code class="raw" id="raw4">irealbook://C%C3%ADrculo%20de%20cuartas%20maj7=Ejercicio%20Diario=Medium%20Swing=C=n=T44%7BC%5E7%20%7CF%5E7%20%7CBb%5E7%20%7CEb%5E7%20%7CAb%5E7%20%7CDb%5E7%20%7CGb%5E7%20%7CB%5E7%20%7CE%5E7%20%7CA%5E7%20%7CD%5E7%20%7CG%5E7%20%7D</code>
+</article><article class="chart">
+  <header><span class="group">Deberes de Antonio</span><h2>Círculo de cuartas dominantes</h2><span class="key">Tono C</span></header>
+  <div class="grid"><span class="bar">C7</span><span class="bar">F7</span><span class="bar">B♭7</span><span class="bar">E♭7</span><span class="bar">A♭7</span><span class="bar">D♭7</span><span class="bar">G♭7</span><span class="bar">B7</span><span class="bar">E7</span><span class="bar">A7</span><span class="bar">D7</span><span class="bar">G7</span></div>
+  <p class="tip">El mismo círculo con acordes de séptima: motivo 5-♭7-5-3 en cada uno.</p>
+  <div class="actions">
+    <a class="open" href="irealbook://C%C3%ADrculo%20de%20cuartas%20dominantes=Ejercicio%20Diario=Medium%20Swing=C=n=T44%7BC7%20%7CF7%20%7CBb7%20%7CEb7%20%7CAb7%20%7CDb7%20%7CGb7%20%7CB7%20%7CE7%20%7CA7%20%7CD7%20%7CG7%20%7D">Abrir en iReal Pro</a>
+    <button type="button" class="copy" data-url="irealbook://C%C3%ADrculo%20de%20cuartas%20dominantes=Ejercicio%20Diario=Medium%20Swing=C=n=T44%7BC7%20%7CF7%20%7CBb7%20%7CEb7%20%7CAb7%20%7CDb7%20%7CGb7%20%7CB7%20%7CE7%20%7CA7%20%7CD7%20%7CG7%20%7D" id="copy5">Copiar enlace</button>
+  </div>
+  <code class="raw" id="raw5">irealbook://C%C3%ADrculo%20de%20cuartas%20dominantes=Ejercicio%20Diario=Medium%20Swing=C=n=T44%7BC7%20%7CF7%20%7CBb7%20%7CEb7%20%7CAb7%20%7CDb7%20%7CGb7%20%7CB7%20%7CE7%20%7CA7%20%7CD7%20%7CG7%20%7D</code>
+</article>
+</main>
+<script>
+document.querySelectorAll('.copy').forEach(function(b){b.addEventListener('click',function(){
+ var url=b.getAttribute('data-url');var done=function(){b.textContent='Copiado';setTimeout(function(){b.textContent='Copiar enlace'},1800)};
+ var sel=function(){var r=document.getElementById('raw'+b.id.slice(4));var s=window.getSelection();var rg=document.createRange();rg.selectNodeContents(r);s.removeAllRanges();s.addRange(rg);b.textContent='Enlace seleccionado: cópialo'};
+ try{navigator.clipboard.writeText(url).then(done,sel)}catch(e){sel()}
+})});
+</script></body></html>
