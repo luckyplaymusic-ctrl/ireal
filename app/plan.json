@@ -1,0 +1,279 @@
+{
+ "semana": "Semana del 9 al 15 de noviembre · preparar la clase de Antonio (lunes 16, 19:00)",
+ "aviso": "El jazz va siempre. Tonalidad de la semana: Mi mayor.",
+ "sesiones": [
+  {
+   "id": "vie13",
+   "fecha": "2026-11-13",
+   "titulo": "Viernes · solo de Chet al completo",
+   "bloques": [
+    {
+     "nombre": "Calentamiento",
+     "min": 15,
+     "items": [
+      {
+       "texto": "Libre: notas largas, ligados suaves, respiración."
+      }
+     ]
+    },
+    {
+     "nombre": "Concone n.º 1",
+     "min": 15,
+     "items": [
+      {
+       "texto": "Una vez con la guía, otra con el acompañamiento. Legato y sonido redondo. Apunta erratas.",
+       "recursos": [
+        {
+         "tipo": "pdf",
+         "clave": "concone-libro",
+         "archivo": "Concone Op. 12 - Libro Trombón.pdf",
+         "pagina": null,
+         "texto": "Concone n.º 1"
+        },
+        {
+         "tipo": "audio",
+         "clave": "concone01-guia",
+         "archivo": "Concone 01 - Guía con melodía.mp3",
+         "texto": "Concone 01 · guía con melodía"
+        },
+        {
+         "tipo": "audio",
+         "clave": "concone01-acomp",
+         "archivo": "Concone 01 - Acompañamiento.mp3",
+         "texto": "Concone 01 · acompañamiento"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "nombre": "Técnica · Doodle",
+     "min": 15,
+     "items": [
+      {
+       "texto": "McChesney, ejercicio 5, hacia la velocidad del audio: 70 % → 85 % → 100 %.",
+       "recursos": [
+        {
+         "tipo": "pdf",
+         "clave": "mcchesney",
+         "archivo": "doodle-studies-and-etudes-bob-mcchesney.pdf",
+         "pagina": null,
+         "texto": "McChesney · ejercicio 5"
+        },
+        {
+         "tipo": "audio",
+         "clave": "mcchesney-ej5",
+         "archivo": null,
+         "texto": "Audio del ejercicio 5"
+        },
+        {
+         "tipo": "metro",
+         "bpm": 80
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "nombre": "Jazz · últimos 8 compases",
+     "min": 25,
+     "items": [
+      {
+       "texto": "Ojo: la última A de All the Things tiene 12 compases. En bucle con Chet a 0,75× y a 1×; luego sobre la base.",
+       "recursos": [
+        {
+         "tipo": "link",
+         "texto": "Grabación de Chet (YouTube)",
+         "url": "https://www.youtube.com/watch?v=t-OudwN1aKQ"
+        },
+        {
+         "tipo": "pdf",
+         "clave": "chet-transcripcion",
+         "archivo": "Chet",
+         "pagina": 1,
+         "texto": "Transcripción del solo"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "nombre": "Jazz · del tema al solo",
+     "min": 20,
+     "items": [
+      {
+       "texto": "Últimos compases del tema + entrada al solo, en bucle sobre la base de All the Things You Are (lista de estándares de iReal)."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "sab14",
+   "fecha": "2026-11-14",
+   "titulo": "Sábado · solo completo sobre la base",
+   "bloques": [
+    {
+     "nombre": "Calentamiento",
+     "min": 15,
+     "items": [
+      {
+       "texto": "Libre."
+      }
+     ]
+    },
+    {
+     "nombre": "Concone n.º 1",
+     "min": 15,
+     "items": [
+      {
+       "texto": "Con el acompañamiento. Si sale, graba una toma.",
+       "recursos": [
+        {
+         "tipo": "pdf",
+         "clave": "concone-libro",
+         "archivo": "Concone Op. 12 - Libro Trombón.pdf",
+         "pagina": null,
+         "texto": "Concone n.º 1"
+        },
+        {
+         "tipo": "audio",
+         "clave": "concone01-acomp",
+         "archivo": "Concone 01 - Acompañamiento.mp3",
+         "texto": "Concone 01 · acompañamiento"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "nombre": "Técnica · Escalas en Mi mayor",
+     "min": 15,
+     "items": [
+      {
+       "texto": "Escala y arpegios de Mi mayor diciendo los grados; ii–V–I en Mi lento.",
+       "recursos": [
+        {
+         "tipo": "ireal",
+         "texto": "ii–V–I en Mi lento",
+         "url": "irealbook://ii%E2%80%93V%E2%80%93I%20en%20Mi%20lento=Ejercicio%20Diario=Medium%20Swing=E=n=T44%7BF%23-7%20%7CF%23-7%20%7CB7%20%7CB7%20%7CE%5E7%20%7CE%5E7%20%7CE%5E7%20%7CE%5E7%20%7D"
+        },
+        {
+         "tipo": "metro",
+         "bpm": 60
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "nombre": "Jazz · solo completo sin Chet",
+     "min": 30,
+     "items": [
+      {
+       "texto": "Primero el solo sin tema sobre la base; luego tema + solo. Si te pierdes, notas guía hasta el siguiente punto de referencia (A en Fm7, A2 en Cm7, puente en Am7).",
+       "recursos": [
+        {
+         "tipo": "link",
+         "texto": "Grabación de Chet (YouTube)",
+         "url": "https://www.youtube.com/watch?v=t-OudwN1aKQ"
+        },
+        {
+         "tipo": "pdf",
+         "clave": "chet-transcripcion",
+         "archivo": "Chet",
+         "pagina": 1,
+         "texto": "Transcripción del solo"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "nombre": "Jazz · patrones",
+     "min": 15,
+     "items": [
+      {
+       "texto": "Arpegio 3-5-♭7-9 por el círculo de dominantes.",
+       "recursos": [
+        {
+         "tipo": "ireal",
+         "texto": "Círculo de cuartas dominantes",
+         "url": "irealbook://C%C3%ADrculo%20de%20cuartas%20dominantes=Ejercicio%20Diario=Medium%20Swing=C=n=T44%7BC7%20%7CF7%20%7CBb7%20%7CEb7%20%7CAb7%20%7CDb7%20%7CGb7%20%7CB7%20%7CE7%20%7CA7%20%7CD7%20%7CG7%20%7D"
+        }
+       ]
+      },
+      {
+       "texto": "Célula 1-3-5-4 por el círculo lento.",
+       "recursos": [
+        {
+         "tipo": "ireal",
+         "texto": "Círculo de cuartas lento",
+         "url": "irealbook://C%C3%ADrculo%20de%20cuartas%20lento=Ejercicio%20Diario=Medium%20Swing=C=n=T44%7BC%5E7%20%7CC%5E7%20%7CF%5E7%20%7CF%5E7%20%7CBb%5E7%20%7CBb%5E7%20%7CEb%5E7%20%7CEb%5E7%20%7CAb%5E7%20%7CAb%5E7%20%7CDb%5E7%20%7CDb%5E7%20%7CGb%5E7%20%7CGb%5E7%20%7CB%5E7%20%7CB%5E7%20%7CE%5E7%20%7CE%5E7%20%7CA%5E7%20%7CA%5E7%20%7CD%5E7%20%7CD%5E7%20%7CG%5E7%20%7CG%5E7%20%20%7D"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "lun16",
+   "fecha": "2026-11-16",
+   "titulo": "Lunes · repaso antes de clase (19:00)",
+   "bloques": [
+    {
+     "nombre": "Calentamiento",
+     "min": 15,
+     "items": [
+      {
+       "texto": "Libre y suave."
+      }
+     ]
+    },
+    {
+     "nombre": "Jazz · ensayo general",
+     "min": 20,
+     "items": [
+      {
+       "texto": "Tema + solo completo sobre la base, de principio a fin, sin parar. Grábalo.",
+       "recursos": [
+        {
+         "tipo": "link",
+         "texto": "Grabación de Chet (YouTube)",
+         "url": "https://www.youtube.com/watch?v=t-OudwN1aKQ"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "nombre": "Jazz · deberes de Antonio",
+     "min": 15,
+     "items": [
+      {
+       "texto": "Frase de Chet como ii–V–I en La♭, Mi♭, Sol y Mi (grados 3-4-5 · 4-5-6 · 1-3-5-4).",
+       "recursos": [
+        {
+         "tipo": "ireal",
+         "texto": "ii–V–I de All the Things",
+         "url": "irealbook://ii%E2%80%93V%E2%80%93I%20de%20All%20the%20Things=Ejercicio%20Diario=Medium%20Swing=Ab=n=T44%7BBb-7%20%7CEb7%20%7CAb%5E7%20%7CAb%5E7%20%7CF-7%20%7CBb7%20%7CEb%5E7%20%7CEb%5E7%20%7CA-7%20%7CD7%20%7CG%5E7%20%7CG%5E7%20%7CF%23-7%20%7CB7%20%7CE%5E7%20%7CE%5E7%20%7D"
+        }
+       ]
+      },
+      {
+       "texto": "Patrón de cuartas por el círculo.",
+       "recursos": [
+        {
+         "tipo": "ireal",
+         "texto": "Círculo de cuartas dominantes",
+         "url": "irealbook://C%C3%ADrculo%20de%20cuartas%20dominantes=Ejercicio%20Diario=Medium%20Swing=C=n=T44%7BC7%20%7CF7%20%7CBb7%20%7CEb7%20%7CAb7%20%7CDb7%20%7CGb7%20%7CB7%20%7CE7%20%7CA7%20%7CD7%20%7CG7%20%7D"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

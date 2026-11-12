@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Estudio trombón</title>
+<meta name="theme-color" content="#1d5f8a">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <h1>Estudio trombón</h1>
+  <span id="weekLabel" class="week"></span>
+</header>
+
+<div class="layout">
+  <section id="viewer" class="viewer" aria-label="Partitura">
+    <div class="viewer-bar">
+      <span id="pdfName" class="pdf-name">Ninguna partitura abierta</span>
+      <div class="viewer-ctrls">
+        <button type="button" id="pdfPrev" aria-label="Página anterior">‹</button>
+        <span id="pdfPage">–</span>
+        <button type="button" id="pdfNext" aria-label="Página siguiente">›</button>
+        <button type="button" id="pdfMark" title="Guardar esta página para el ejercicio">Guardar página</button>
+        <button type="button" id="pdfClose" aria-label="Cerrar partitura">✕</button>
+      </div>
+    </div>
+    <div id="pdfWrap" class="pdf-wrap"><canvas id="pdfCanvas"></canvas>
+      <p id="pdfEmpty" class="empty">Toca un botón 📄 de un ejercicio y la partitura se abrirá aquí, en su página.</p>
+    </div>
+  </section>
+
+  <section class="panel">
+    <nav class="tabs" role="tablist">
+      <button type="button" class="tab on" data-tab="hoy">Hoy</button>
+      <button type="button" class="tab" data-tab="audio">Audio</button>
+      <button type="button" class="tab" data-tab="metro">Metrónomo</button>
+      <button type="button" class="tab" data-tab="timer">Temporizador</button>
+      <button type="button" class="tab" data-tab="biblio">Biblioteca</button>
+    </nav>
+
+    <div id="tab-hoy" class="tabpane on">
+      <label class="sel">Sesión
+        <select id="sessionSel"></select>
+      </label>
+      <p id="aviso" class="aviso"></p>
+      <div id="runBar" class="runbar">
+        <button type="button" id="runStart" class="primary">▶ Empezar sesión</button>
+        <span id="runInfo"></span>
+        <button type="button" id="runNext" hidden>Siguiente bloque</button>
+        <button type="button" id="runStop" hidden>Parar</button>
+      </div>
+      <div id="blocks"></div>
+      <label class="notes">Apuntes de la sesión (tempo del doodle, nota aguda, erratas…)
+        <textarea id="notes" rows="4"></textarea>
+      </label>
+      <button type="button" id="copyNotes">Copiar apuntes para Claude</button>
+    </div>
+
+    <div id="tab-audio" class="tabpane">
+      <p id="audioName" class="muted">Ningún audio cargado. Elige uno desde «Hoy» o desde la Biblioteca.</p>
+      <audio id="audio" controls preload="auto"></audio>
+      <label class="range">Velocidad <b id="rateVal">100 %</b>
+        <input type="range" id="rate" min="50" max="110" step="5" value="100">
+      </label>
+      <div class="chips">
+        <button type="button" data-rate="70">70 %</button>
+        <button type="button" data-rate="85">85 %</button>
+        <button type="button" data-rate="100">100 %</button>
+      </div>
+      <div class="loop">
+        <button type="button" id="loopA">Marcar A</button>
+        <button type="button" id="loopB">Marcar B</button>
+        <button type="button" id="loopOff">Quitar bucle</button>
+        <span id="loopInfo" class="muted">Sin bucle</span>
+      </div>
+    </div>
+
+    <div id="tab-metro" class="tabpane">
+      <div class="bpm"><button type="button" id="bpmDown">−</button><output id="bpmOut">80</output><button type="button" id="bpmUp">+</button></div>
+      <input type="range" id="bpm" min="30" max="240" value="80" aria-label="Tempo">
+      <label class="sel">Compás
+        <select id="beats"><option value="4">4/4</option><option value="3">3/4</option><option value="2">2/4</option><option value="1">Sin acento</option></select>
+      </label>
+      <label class="check"><input type="checkbox" id="swing"> Subdivisión swing (corcheas)</label>
+      <div class="beatdots" id="beatDots"></div>
+      <button type="button" id="metroToggle" class="primary big">▶ Metrónomo</button>
+      <button type="button" id="tap">Marcar tempo (tap)</button>
+    </div>
+
+    <div id="tab-timer" class="tabpane">
+      <p class="muted">EMOM: cambio de ejercicio cada intervalo, con aviso sonoro.</p>
+      <div class="timer-cfg">
+        <label>Intervalo (min) <input type="number" id="emomMin" min="1" max="30" value="3"></label>
+        <label>Rondas <input type="number" id="emomRounds" min="1" max="20" value="5"></label>
+      </div>
+      <div class="clock" id="clock">00:00</div>
+      <p id="clockInfo" class="muted"></p>
+      <button type="button" id="emomToggle" class="primary big">▶ Empezar EMOM</button>
+    </div>
+
+    <div id="tab-biblio" class="tabpane">
+      <p class="muted">Carga aquí tus libros (PDF) y audios una sola vez. Se guardan en este aparato, privados, y funcionan sin conexión.</p>
+      <label class="filebtn primary">＋ Añadir PDF o audios<input type="file" id="fileIn" multiple accept="application/pdf,audio/*"></label>
+      <p id="storeInfo" class="muted"></p>
+      <ul id="libList" class="liblist"></ul>
+    </div>
+  </section>
+</div>
+
+<div id="picker" class="picker" hidden>
+  <div class="picker-box">
+    <h2 id="pickerTitle">Elige el archivo</h2>
+    <ul id="pickerList" class="liblist"></ul>
+    <button type="button" id="pickerCancel">Cancelar</button>
+  </div>
+</div>
+<div id="toast" class="toast" hidden></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
