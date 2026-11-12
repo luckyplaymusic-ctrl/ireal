@@ -56,15 +56,15 @@
         {
          "tipo": "pdf",
          "clave": "mcchesney",
-         "archivo": "doodle-studies-and-etudes-bob-mcchesney.pdf",
+         "archivo": "doodle-studies",
          "pagina": null,
          "texto": "McChesney · ejercicio 5"
         },
         {
          "tipo": "audio",
          "clave": "mcchesney-ej5",
-         "archivo": null,
-         "texto": "Audio del ejercicio 5"
+         "archivo": "14 Track 14.mp3",
+         "texto": "Audio del ejercicio 5 (pista 14)"
         },
         {
          "tipo": "metro",
