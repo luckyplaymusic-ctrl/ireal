@@ -36,6 +36,7 @@
   <section class="panel">
     <nav class="tabs" role="tablist">
       <button type="button" class="tab on" data-tab="hoy">Hoy</button>
+      <button type="button" class="tab" data-tab="pat">Patrones</button>
       <button type="button" class="tab" data-tab="audio">Audio</button>
       <button type="button" class="tab" data-tab="metro">Metrónomo</button>
       <button type="button" class="tab" data-tab="timer">Temporizador</button>
@@ -58,6 +59,14 @@
         <textarea id="notes" rows="4"></textarea>
       </label>
       <button type="button" id="copyNotes">Copiar apuntes para Claude</button>
+    </div>
+
+    <div id="tab-pat" class="tabpane">
+      <p class="muted">Patrones ii–V–I del Vol. 3 de Aebersold. Un patrón queda superado con las 12 tonalidades «sin mirar», a 90 bpm o más, y tocado entero con el vídeo sin pararte.</p>
+      <p id="patSum" class="patsum"></p>
+      <div id="patGrid" class="patgrid" role="group" aria-label="Patrones del 1 al 72"></div>
+      <div id="patDetail" class="block"></div>
+      <div class="patrow"><label class="sel">Ya los tenía hasta el patrón<input type="number" id="patBulkN" min="1" max="72" inputmode="numeric"></label><button type="button" id="patBulk">Marcar como superados</button></div>
     </div>
 
     <div id="tab-audio" class="tabpane">
@@ -103,8 +112,8 @@
     </div>
 
     <div id="tab-biblio" class="tabpane">
-      <p class="muted">Carga aquí tus libros (PDF) y audios una sola vez. Se guardan en este aparato, privados, y funcionan sin conexión.</p>
-      <label class="filebtn primary">＋ Añadir PDF o audios<input type="file" id="fileIn" multiple accept="application/pdf,audio/*"></label>
+      <p class="muted">Carga aquí tus libros (PDF), audios y vídeos una sola vez. Se guardan en este aparato, privados, y funcionan sin conexión.</p>
+      <label class="filebtn primary">＋ Añadir PDF o audios<input type="file" id="fileIn" multiple accept="application/pdf,audio/*,video/*"></label>
       <p id="storeInfo" class="muted"></p>
       <ul id="libList" class="liblist"></ul>
     </div>
@@ -117,6 +126,10 @@
     <ul id="pickerList" class="liblist"></ul>
     <button type="button" id="pickerCancel">Cancelar</button>
   </div>
+</div>
+<div id="videoBox" class="videobox" hidden>
+  <div class="videobar"><span id="videoName" class="pdf-name"></span><button type="button" id="videoClose" aria-label="Cerrar vídeo">✕</button></div>
+  <video id="video" controls playsinline></video>
 </div>
 <div id="toast" class="toast" hidden></div>
 

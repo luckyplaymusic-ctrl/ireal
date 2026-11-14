@@ -27,7 +27,7 @@
     }); }).then(function (l) { lib = l.sort(function (a, b) { return a.name.localeCompare(b.name, 'es', { numeric: true }); }); renderLib(); renderBlocks(); });
   }
   function getBlob(name) { return dbP.then(function (db) { return new Promise(function (res) { var r = db.transaction('files').objectStore('files').get(name); r.onsuccess = function () { res(r.result ? r.result.blob : null); }; }); }); }
-  function kind(type, name) { if (/pdf/.test(type) || /\.pdf$/i.test(name)) return 'pdf'; if (/^audio\//.test(type) || /\.(mp3|wav|m4a|aac|ogg|flac)$/i.test(name)) return 'audio'; return 'otro'; }
+  function kind(type, name) { if (/pdf/.test(type) || /\.pdf$/i.test(name)) return 'pdf'; if (/^audio\//.test(type) || /\.(mp3|wav|m4a|aac|ogg|flac)$/i.test(name)) return 'audio'; if (/^video\//.test(type) || /\.(mp4|webm|mov|m4v)$/i.test(name)) return 'video'; return 'otro'; }
 
   $('fileIn').addEventListener('change', function (e) {
     var files = Array.prototype.slice.call(e.target.files || []); if (!files.length) return;
@@ -42,9 +42,9 @@
     if (!lib.length) { ul.innerHTML = '<li><span>Aún no hay archivos. Añade el libro de McChesney, el de Concone, la transcripción de Chet y los audios.</span></li>'; }
     lib.forEach(function (f) {
       var li = document.createElement('li'); var k = kind(f.type, f.name);
-      li.innerHTML = '<span>' + (k === 'pdf' ? '📄 ' : k === 'audio' ? '🎵 ' : '') + esc(f.name) + ' · ' + (f.size / 1048576).toFixed(1) + ' MB</span>';
+      li.innerHTML = '<span>' + (k === 'pdf' ? '📄 ' : k === 'audio' ? '🎵 ' : k === 'video' ? '🎬 ' : '') + esc(f.name) + ' · ' + (f.size / 1048576).toFixed(1) + ' MB</span>';
       var open = document.createElement('button'); open.type = 'button'; open.textContent = 'Abrir';
-      open.onclick = function () { if (k === 'pdf') openPdf(f.name, 1, null); else if (k === 'audio') { loadAudio(f.name); showTab('audio'); } };
+      open.onclick = function () { if (k === 'pdf') openPdf(f.name, 1, null); else if (k === 'audio') { loadAudio(f.name); showTab('audio'); } else if (k === 'video') openVideo(f.name); };
       var del = document.createElement('button'); del.type = 'button'; del.textContent = 'Borrar';
       del.onclick = function () { if (del.dataset.sure) { tx('readwrite', function (s) { return s.delete(f.name); }).then(refreshLib); } else { del.dataset.sure = '1'; del.textContent = '¿Seguro?'; setTimeout(function () { delete del.dataset.sure; del.textContent = 'Borrar'; }, 3000); } };
       li.appendChild(open); li.appendChild(del); ul.appendChild(li);
@@ -56,25 +56,25 @@
   var maps = LS.get('maps', {});
   function saveMaps() { LS.set('maps', maps); }
   function resolveFile(res) {
-    var m = maps[res.clave]; var want = res.tipo === 'pdf' ? 'pdf' : 'audio';
+    var m = maps[res.clave]; var want = res.tipo === 'pdf' ? 'pdf' : res.tipo === 'video' ? 'video' : 'audio';
     if (m && m.archivo && lib.some(function (f) { return f.name === m.archivo; })) return m.archivo;
     if (res.archivo) {
       var a = norm(res.archivo);
       var exact = lib.filter(function (f) { return norm(f.name) === a; })[0]; if (exact) return exact.name;
-      var part = lib.filter(function (f) { return kind(f.type, f.name) === want && norm(f.name).indexOf(a.replace(/\.(pdf|mp3|wav)$/i, '')) >= 0; })[0]; if (part) return part.name;
+      var part = lib.filter(function (f) { return kind(f.type, f.name) === want && norm(f.name).indexOf(a.replace(/\.(pdf|mp3|wav|mp4)$/i, '')) >= 0; })[0]; if (part) return part.name;
     }
     return null;
   }
   function pick(res, cb) {
-    var want = res.tipo === 'pdf' ? 'pdf' : 'audio';
+    var want = res.tipo === 'pdf' ? 'pdf' : res.tipo === 'video' ? 'video' : 'audio';
     var list = lib.filter(function (f) { return kind(f.type, f.name) === want; });
     $('pickerTitle').textContent = 'Elige el archivo para «' + res.texto + '»';
     var ul = $('pickerList'); ul.innerHTML = '';
-    if (!list.length) ul.innerHTML = '<li><span>No hay ' + (want === 'pdf' ? 'PDF' : 'audios') + ' en la biblioteca. Añádelos en la pestaña Biblioteca.</span></li>';
+    if (!list.length) ul.innerHTML = '<li><span>No hay ' + (want === 'pdf' ? 'PDF' : want === 'video' ? 'vídeos' : 'audios') + ' en la biblioteca. Añádelos en la pestaña Biblioteca.</span></li>';
     list.forEach(function (f) {
       var li = document.createElement('li'); li.innerHTML = '<span>' + esc(f.name) + '</span>';
       var b = document.createElement('button'); b.type = 'button'; b.textContent = 'Elegir';
-      b.onclick = function () { maps[res.clave] = Object.assign({}, maps[res.clave], { archivo: f.name }); saveMaps(); $('picker').hidden = true; renderBlocks(); cb(f.name); };
+      b.onclick = function () { maps[res.clave] = Object.assign({}, maps[res.clave], { archivo: f.name }); saveMaps(); $('picker').hidden = true; renderBlocks(); renderPat(); cb(f.name); };
       li.appendChild(b); ul.appendChild(li);
     });
     $('picker').hidden = false;
@@ -204,7 +204,7 @@
   function selectSession(id) { session = plan.sesiones.filter(function (s) { return s.id === id; })[0]; stopRun(); $('notes').value = LS.get('notes-' + id, ''); renderBlocks(); }
   $('notes').addEventListener('input', function () { if (session) LS.set('notes-' + session.id, this.value); });
   $('copyNotes').onclick = function () {
-    var txt = 'Apuntes de ' + (session ? session.titulo : 'la sesión') + ' (' + new Date().toLocaleDateString('es-ES') + '):\n' + $('notes').value;
+    var txt = 'Apuntes de ' + (session ? session.titulo : 'la sesión') + ' (' + new Date().toLocaleDateString('es-ES') + '):\n' + $('notes').value + '\n\n' + patSummary();
     var fallback = function () { $('notes').select(); toast('Selecciona y copia el texto'); };
     try { navigator.clipboard.writeText(txt).then(function () { toast('Copiado. Pégalo en el chat con Claude.'); }, fallback); } catch (e) { fallback(); }
   };
@@ -216,8 +216,10 @@
     var b = document.createElement('button'); b.type = 'button';
     if (res.tipo === 'metro') { b.textContent = '⏱ Metrónomo ' + res.bpm; b.onclick = function () { setBpm(res.bpm); showTab('metro'); if (!metro.on) metroStart(); }; return b; }
     var file = resolveFile(res);
-    if (!file) { b.className = 'missing'; b.textContent = (res.tipo === 'pdf' ? '📄 ' : '🎵 ') + res.texto + ' · asignar archivo'; b.onclick = function () { pick(res, function (n) { if (res.tipo === 'pdf') openPdf(n, 1, res.clave); else { loadAudio(n); showTab('audio'); } }); }; return b; }
-    if (res.tipo === 'pdf') { var m = maps[res.clave] || {}; var pg = m.pagina || res.pagina || 1; b.textContent = '📄 ' + res.texto + ' · pág. ' + pg; b.onclick = function () { openPdf(file, pg, res.clave); }; if (!m.pagina && !res.pagina) b.textContent += ' (busca la página y pulsa «Guardar página»)'; }
+    var ico = res.tipo === 'pdf' ? '📄 ' : res.tipo === 'video' ? '🎬 ' : '🎵 ';
+    if (!file) { b.className = 'missing'; b.textContent = ico + res.texto + ' · asignar archivo'; b.onclick = function () { pick(res, function (n) { if (res.tipo === 'pdf') openPdf(n, res.pagina || 1, res.clave); else if (res.tipo === 'video') openVideo(n); else { loadAudio(n); showTab('audio'); } }); }; return b; }
+    if (res.tipo === 'pdf') { var m = maps[res.clave] || {}; var pg = (res.fija && res.pagina) || m.pagina || res.pagina || 1; b.textContent = '📄 ' + res.texto + ' · pág. ' + pg; b.onclick = function () { openPdf(file, pg, res.clave); }; if (!m.pagina && !res.pagina) b.textContent += ' (busca la página y pulsa «Guardar página»)'; }
+    else if (res.tipo === 'video') { b.textContent = '🎬 ' + res.texto; b.onclick = function () { openVideo(file); }; }
     else { b.textContent = '🎵 ' + res.texto; b.onclick = function () { loadAudio(file); showTab('audio'); }; }
     var wrap = document.createElement('span'); wrap.style.display = 'inline-flex'; wrap.style.gap = '4px'; wrap.appendChild(b);
     var ch = document.createElement('button'); ch.type = 'button'; ch.textContent = '⇄'; ch.title = 'Cambiar archivo'; ch.setAttribute('aria-label', 'Cambiar archivo de ' + res.texto); ch.onclick = function () { pick(res, function () {}); };
@@ -225,6 +227,7 @@
   }
   function renderBlocks() {
     if (!session) return; var host = $('blocks'); host.innerHTML = '';
+    host.appendChild(patCard());
     session.bloques.forEach(function (bl, i) {
       var d = document.createElement('div'); d.className = 'block' + (run.on && run.idx === i ? ' now' : ''); d.id = 'blk' + i;
       d.innerHTML = '<h3><span>' + esc(bl.nombre) + '</span><small>' + bl.min + ' min</small></h3>';
@@ -250,6 +253,124 @@
   $('runStop').onclick = stopRun;
   document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible' && (run.on || emom.on || metro.on)) wake(true); });
 
+
+  /* ---------- Vídeo ---------- */
+  var vidURL = null;
+  function openVideo(name) {
+    getBlob(name).then(function (b) {
+      if (!b) { toast('No encuentro ese vídeo en la biblioteca.'); return; }
+      if (vidURL) URL.revokeObjectURL(vidURL); vidURL = URL.createObjectURL(b);
+      var v = $('video'); v.src = vidURL; $('videoName').textContent = name; $('videoBox').hidden = false; wake(true);
+      v.play().catch(function () {});
+    });
+  }
+  $('videoClose').onclick = function () { var v = $('video'); v.pause(); $('videoBox').hidden = true; };
+
+  /* ---------- Patrones ii–V–I (Aebersold Vol. 3) con autoevaluación ---------- */
+  var KEYS = ['Do', 'Si♭', 'La♭', 'Sol♭', 'Mi', 'Re', 'Re♭', 'Si', 'La', 'Sol', 'Fa', 'Mi♭'];
+  var NPAT = 72, MARK = ['○', '◐', '●'], MARKTXT = ['sin trabajar', 'me sale leyendo', 'me sale sin mirar'];
+  var prog = LS.get('patrones', {});
+  var patSel = LS.get('pat-sel', null);
+  function P(n) { if (!prog[n]) prog[n] = { k: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], tempo: 0, entero: false, nota: '', manual: false }; return prog[n]; }
+  function saveProg() { LS.set('patrones', prog); }
+  function isSup(n) { var p = prog[n]; if (!p) return false; return !!p.manual || (p.k.every(function (x) { return x === 2; }) && p.tempo >= 90 && !!p.entero); }
+  function started(n) { var p = prog[n]; return !!(p && (p.k.some(function (x) { return x > 0; }) || p.tempo > 0 || p.nota)); }
+  function current() { for (var n = 1; n <= NPAT; n++) if (!isSup(n)) return n; return null; }
+  function review() {
+    var done = []; for (var n = 1; n <= NPAT; n++) if (isSup(n)) done.push(n);
+    if (done.length < 2) return null;
+    var d = new Date(); var w = Math.floor((d - new Date(d.getFullYear(), 0, 1)) / 6048e5);   // cambia cada semana
+    return done[(w * 7 + 3) % done.length];
+  }
+  function patPdf(n) {
+    if (n <= 20) return { archivo: 'II V I CLAVE DE FA 01-20', pagina: n, grupo: 1 };
+    if (n <= 40) return { archivo: 'II V I CLAVE DE FA 21 - 40', pagina: n - 20, grupo: 2 };
+    if (n <= 60) return { archivo: 'II V I CLAVE DE FA 41 - 60', pagina: n - 40, grupo: 3 };
+    return { archivo: 'II V I CLAVE DE FA 60 - 72', pagina: n - 59, grupo: 4 };
+  }
+  function pad(n) { return String(n).padStart(2, '0'); }
+  function patRes(n) {
+    var pp = patPdf(n);
+    return [
+      { tipo: 'pdf', clave: 'pat-pdf-' + pp.grupo, archivo: pp.archivo, pagina: pp.pagina, texto: 'Patrón ' + n, fija: true },
+      { tipo: 'video', clave: 'pat-v90-' + n, archivo: 'ii-V-I patrón ' + pad(n) + ' · 90 bpm', texto: 'Vídeo a 90' },
+      { tipo: 'video', clave: 'pat-v120-' + n, archivo: 'ii-V-I patrón ' + pad(n) + ' · 120 bpm', texto: 'Vídeo a 120' }
+    ];
+  }
+  function patCard() {
+    var c = current(), r = review();
+    var d = document.createElement('div'); d.className = 'block patcard';
+    if (!c) { d.innerHTML = '<h3><span>Patrones ii–V–I</span></h3><p>¡Los 72 patrones superados!</p>'; return d; }
+    var p = prog[c] || { k: [] }; var nOk = (p.k || []).filter(function (x) { return x === 2; }).length;
+    d.innerHTML = '<h3><span>Patrón ii–V–I del día: nº ' + c + '</span><small>' + nOk + '/12 sin mirar</small></h3>' +
+      '<p class="muted">Para pasar al siguiente: las 12 tonalidades «sin mirar», a 90 bpm o más, y tocado entero con el vídeo sin pararte.</p>';
+    var rr = document.createElement('div'); rr.className = 'res';
+    patRes(c).forEach(function (res) { rr.appendChild(resButton(res)); });
+    var go = document.createElement('button'); go.type = 'button'; go.textContent = '✓ Autoevaluar';
+    go.onclick = function () { patSel = c; LS.set('pat-sel', c); renderPat(); showTab('pat'); };
+    rr.appendChild(go); d.appendChild(rr);
+    if (r) { var rv = document.createElement('p'); rv.className = 'muted'; rv.innerHTML = 'Repaso de la semana: <b>patrón ' + r + '</b> (ya superado). Una pasada en tres tonalidades al azar.'; d.appendChild(rv); }
+    return d;
+  }
+  function renderPat() {
+    var grid = $('patGrid'); if (!grid) return; grid.innerHTML = '';
+    var c = current(); var nSup = 0;
+    for (var n = 1; n <= NPAT; n++) {
+      var b = document.createElement('button'); b.type = 'button'; b.textContent = n;
+      var st = isSup(n) ? 'sup' : (n === c ? 'cur' : (started(n) ? 'wip' : ''));
+      if (st === 'sup') nSup++;
+      b.className = 'pcell ' + st + (n === patSel ? ' sel' : '');
+      b.setAttribute('aria-label', 'Patrón ' + n + (st === 'sup' ? ', superado' : st === 'cur' ? ', en curso' : ''));
+      (function (n) { b.onclick = function () { patSel = n; LS.set('pat-sel', n); renderPat(); $('patDetail').scrollIntoView({ behavior: 'smooth', block: 'start' }); }; })(n);
+      grid.appendChild(b);
+    }
+    $('patSum').textContent = nSup + ' de 72 superados' + (c ? ' · patrón del día: ' + c : '');
+    var n0 = patSel || c || 1; patSel = n0;
+    var p = P(n0); var det = $('patDetail');
+    det.innerHTML = '';
+    var h = document.createElement('h3');
+    h.innerHTML = '<span>Patrón ' + n0 + '</span><small>' + (isSup(n0) ? '✅ superado' + (p.manual ? ' (marcado a mano)' : '') : (started(n0) ? 'en curso' : 'pendiente')) + '</small>';
+    det.appendChild(h);
+    var rr = document.createElement('div'); rr.className = 'res'; patRes(n0).forEach(function (res) { rr.appendChild(resButton(res)); }); det.appendChild(rr);
+    var kl = document.createElement('p'); kl.className = 'muted'; kl.textContent = 'Toca cada tonalidad para cambiarla: ○ sin trabajar → ◐ me sale leyendo → ● me sale sin mirar.'; det.appendChild(kl);
+    var kg = document.createElement('div'); kg.className = 'keygrid';
+    KEYS.forEach(function (k, i) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'kcell k' + p.k[i];
+      b.innerHTML = '<b>' + MARK[p.k[i]] + '</b> ' + k; b.setAttribute('aria-label', k + ': ' + MARKTXT[p.k[i]]);
+      b.onclick = function () { p.k[i] = (p.k[i] + 1) % 3; afterChange(n0); };
+      kg.appendChild(b);
+    });
+    det.appendChild(kg);
+    var row = document.createElement('div'); row.className = 'patrow';
+    row.innerHTML = '<label class="sel">Tempo al que te sale limpio<select id="patTempo"><option value="0">—</option><option value="60">60</option><option value="70">70</option><option value="80">80</option><option value="90">90</option><option value="100">100</option><option value="110">110</option><option value="120">120</option><option value="140">140</option><option value="160">160</option></select></label>' +
+      '<label class="check"><input type="checkbox" id="patEntero"> Lo he tocado entero con el vídeo, sin pararme</label>';
+    det.appendChild(row);
+    $('patTempo').value = String(p.tempo || 0); $('patEntero').checked = !!p.entero;
+    $('patTempo').onchange = function () { p.tempo = +this.value; afterChange(n0); };
+    $('patEntero').onchange = function () { p.entero = this.checked; afterChange(n0); };
+    var nl = document.createElement('label'); nl.className = 'notes'; nl.textContent = 'Notas (tonalidades que cuestan, articulación…)';
+    var ta = document.createElement('textarea'); ta.rows = 2; ta.value = p.nota || ''; ta.oninput = function () { p.nota = this.value; saveProg(); }; nl.appendChild(ta); det.appendChild(nl);
+    var man = document.createElement('button'); man.type = 'button';
+    man.textContent = p.manual ? 'Quitar «superado» manual' : 'Ya lo tenía: marcar como superado';
+    man.onclick = function () { p.manual = !p.manual; afterChange(n0); }; det.appendChild(man);
+  }
+  function afterChange(n) {
+    var was = LS.get('pat-sup-' + n, false); saveProg(); var now = isSup(n); LS.set('pat-sup-' + n, now);
+    if (now && !was) { bell(2); toast('¡Patrón ' + n + ' superado! El siguiente pasa a ser el patrón del día.'); }
+    renderPat(); renderBlocks();
+  }
+  $('patBulk').onclick = function () {
+    var up = Math.min(NPAT, Math.max(0, +$('patBulkN').value || 0)); if (!up) { toast('Escribe hasta qué patrón los tienes'); return; }
+    for (var n = 1; n <= up; n++) { P(n).manual = true; LS.set('pat-sup-' + n, true); }
+    saveProg(); patSel = current(); LS.set('pat-sel', patSel); renderPat(); renderBlocks(); toast('Marcados como superados del 1 al ' + up);
+  };
+  function patSummary() {
+    var c = current(), nSup = 0; for (var n = 1; n <= NPAT; n++) if (isSup(n)) nSup++;
+    var out = 'Patrones ii–V–I: ' + nSup + '/72 superados' + (c ? '; patrón del día: ' + c : '') + '.';
+    if (c && prog[c]) { var p = prog[c]; out += '\nPatrón ' + c + ': ' + KEYS.map(function (k, i) { return k + ' ' + MARK[p.k[i]]; }).join(', ') + '; tempo ' + (p.tempo || '—') + '; entero con vídeo: ' + (p.entero ? 'sí' : 'no') + (p.nota ? '; notas: ' + p.nota : '') + '.'; }
+    return out;
+  }
+
   /* ---------- Pestañas ---------- */
   function showTab(name) {
     Array.prototype.forEach.call(document.querySelectorAll('.tab'), function (t) { t.classList.toggle('on', t.dataset.tab === name); });
@@ -258,5 +379,5 @@
   Array.prototype.forEach.call(document.querySelectorAll('.tab'), function (t) { t.onclick = function () { showTab(t.dataset.tab); }; });
 
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () {});
-  refreshLib().then(loadPlan);
+  refreshLib().then(loadPlan).then(renderPat);
 })();
