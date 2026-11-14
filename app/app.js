@@ -373,7 +373,7 @@
 
 
   /* ---------- Sincronizar con Google Drive (carpeta APP ESTUDIO) ---------- */
-  var GCLIENT = '';   // ID de cliente OAuth (proyecto «Estudio Trombon»)
+  var GCLIENT = '315641066536-v7jqjnjie0ep9s6jlm8p78ia001p0vhl.apps.googleusercontent.com';   // ID de cliente OAuth (proyecto «Estudio Trombon»)
   var DRIVE_FOLDER = 'APP ESTUDIO';
   var gTok = null, gTokExp = 0, syncPlan = null;
   function gsiReady() { return window.google && google.accounts && google.accounts.oauth2; }
