@@ -371,6 +371,77 @@
     return out;
   }
 
+
+  /* ---------- Sincronizar con Google Drive (carpeta APP ESTUDIO) ---------- */
+  var GCLIENT = '';   // ID de cliente OAuth (proyecto «Estudio Trombon»)
+  var DRIVE_FOLDER = 'APP ESTUDIO';
+  var gTok = null, gTokExp = 0, syncPlan = null;
+  function gsiReady() { return window.google && google.accounts && google.accounts.oauth2; }
+  function getToken() {
+    return new Promise(function (res, rej) {
+      if (gTok && Date.now() < gTokExp - 60000) return res(gTok);
+      if (!GCLIENT) return rej(new Error('Falta configurar el acceso a Drive.'));
+      if (!gsiReady()) return rej(new Error('No se ha podido cargar el inicio de sesión de Google. ¿Hay conexión?'));
+      var tc = google.accounts.oauth2.initTokenClient({ client_id: GCLIENT, scope: 'https://www.googleapis.com/auth/drive.readonly',
+        callback: function (r) { if (r.error) return rej(new Error('Google no ha dado permiso (' + r.error + ').')); gTok = r.access_token; gTokExp = Date.now() + (r.expires_in || 3600) * 1000; res(gTok); } });
+      tc.requestAccessToken({ prompt: gTok ? '' : 'consent' });
+    });
+  }
+  function gapi(path, tok) {
+    return fetch('https://www.googleapis.com/drive/v3/' + path, { headers: { Authorization: 'Bearer ' + tok } })
+      .then(function (r) { if (!r.ok) throw new Error('Drive respondió ' + r.status); return r.json(); });
+  }
+  function listFolder(id, tok, prefix, out) {
+    var q = encodeURIComponent("'" + id + "' in parents and trashed=false");
+    var page = function (pt) {
+      return gapi('files?q=' + q + '&pageSize=1000&fields=nextPageToken,files(id,name,mimeType,size,modifiedTime)' + (pt ? '&pageToken=' + pt : ''), tok).then(function (j) {
+        var subs = [];
+        (j.files || []).forEach(function (f) {
+          if (f.mimeType === 'application/vnd.google-apps.folder') subs.push(listFolder(f.id, tok, prefix + f.name + ' / ', out));
+          else if (kind(f.mimeType, f.name) !== 'otro') out.push({ id: f.id, name: f.name, type: f.mimeType, size: +f.size || 0, mod: f.modifiedTime, path: prefix });
+        });
+        return Promise.all(subs).then(function () { if (j.nextPageToken) return page(j.nextPageToken); });
+      });
+    };
+    return page(null);
+  }
+  function syncMsg(t) { $('syncInfo').textContent = t; }
+  $('syncBtn').onclick = function () {
+    syncMsg('Conectando con Google…');
+    getToken().then(function (tok) {
+      var q = encodeURIComponent("name='" + DRIVE_FOLDER + "' and mimeType='application/vnd.google-apps.folder' and trashed=false");
+      return gapi('files?q=' + q + '&fields=files(id,name)', tok).then(function (j) {
+        if (!j.files || !j.files.length) throw new Error('No encuentro la carpeta «' + DRIVE_FOLDER + '» en tu Drive.');
+        var out = []; syncMsg('Buscando archivos en «' + DRIVE_FOLDER + '»…');
+        return Promise.all(j.files.map(function (f) { return listFolder(f.id, tok, '', out); })).then(function () { return out; });
+      });
+    }).then(function (files) {
+      var vids = $('syncVideos').checked;
+      var have = {}; lib.forEach(function (f) { have[f.name] = f.size; });
+      var todo = files.filter(function (f) { return (vids || kind(f.type, f.name) !== 'video') && have[f.name] !== f.size; });
+      var mb = todo.reduce(function (a, f) { return a + f.size; }, 0) / 1048576;
+      if (!todo.length) { syncMsg('Todo al día: ' + files.length + ' archivo(s) en Drive, ninguno nuevo.'); return; }
+      syncPlan = todo;
+      syncMsg(todo.length + ' archivo(s) nuevos o cambiados · ' + mb.toFixed(0) + ' MB. Pulsa «Descargar» (mejor con wifi).');
+      $('syncGo').hidden = false;
+    }).catch(function (e) { syncMsg(e.message); });
+  };
+  $('syncGo').onclick = function () {
+    if (!syncPlan) return; $('syncGo').hidden = true; var list = syncPlan; syncPlan = null; var i = 0, ok = 0;
+    getToken().then(function (tok) {
+      var next = function () {
+        if (i >= list.length) { syncMsg('Descargados ' + ok + ' de ' + list.length + '. Ya funcionan sin conexión.'); if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); return refreshLib().then(renderPat); }
+        var f = list[i++]; syncMsg('Descargando ' + i + ' de ' + list.length + ': ' + f.name + '…');
+        return fetch('https://www.googleapis.com/drive/v3/files/' + f.id + '?alt=media', { headers: { Authorization: 'Bearer ' + tok } })
+          .then(function (r) { if (!r.ok) throw new Error(r.status); return r.blob(); })
+          .then(function (b) { return tx('readwrite', function (s) { return s.put({ name: f.name, type: f.type || b.type || '', size: f.size || b.size, blob: b, added: Date.now(), driveId: f.id, mod: f.mod }); }); })
+          .then(function () { ok++; }, function () { toast('No se pudo bajar ' + f.name); })
+          .then(next);
+      };
+      return next();
+    }).catch(function (e) { syncMsg(e.message); });
+  };
+
   /* ---------- Pestañas ---------- */
   function showTab(name) {
     Array.prototype.forEach.call(document.querySelectorAll('.tab'), function (t) { t.classList.toggle('on', t.dataset.tab === name); });

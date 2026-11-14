@@ -113,6 +113,12 @@
 
     <div id="tab-biblio" class="tabpane">
       <p class="muted">Carga aquí tus libros (PDF), audios y vídeos una sola vez. Se guardan en este aparato, privados, y funcionan sin conexión.</p>
+      <div class="syncbox">
+        <button type="button" id="syncBtn" class="primary">⟳ Sincronizar con Drive</button>
+        <label class="check"><input type="checkbox" id="syncVideos" checked> Incluir vídeos</label>
+        <button type="button" id="syncGo" hidden>Descargar</button>
+        <p id="syncInfo" class="muted">Baja a esta tablet lo que haya en la carpeta «APP ESTUDIO» de tu Drive.</p>
+      </div>
       <label class="filebtn primary">＋ Añadir PDF o audios<input type="file" id="fileIn" multiple accept="application/pdf,audio/*,video/*"></label>
       <p id="storeInfo" class="muted"></p>
       <ul id="libList" class="liblist"></ul>
@@ -134,6 +140,7 @@
 <div id="toast" class="toast" hidden></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://accounts.google.com/gsi/client" async></script>
 <script src="app.js"></script>
 </body>
 </html>

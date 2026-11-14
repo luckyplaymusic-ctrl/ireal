@@ -102,3 +102,5 @@ audio{width:100%}
 .videobar{display:flex;align-items:center;gap:8px;padding:8px;color:#fff}
 .videobar button{background:#222;color:#fff;border-color:#444}
 .videobox video{flex:1;width:100%;min-height:0;background:#000}
+.syncbox{display:flex;flex-wrap:wrap;gap:8px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:10px}
+.syncbox p{flex-basis:100%}
